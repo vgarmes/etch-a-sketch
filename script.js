@@ -5,11 +5,23 @@ function generateGrid(gridSize) {
     for (let i = 0; i < gridSize; i++) {
         styleString += "auto ";
         for (let j = 0; j < gridSize; j++) {
-            htmlElements += '<div class="grid-item">' + (gridSize*i+j+1) + '</div>';
+            htmlElements += '<div id = "'+ (gridSize*i+j+1) +'" class="grid-item"></div>';
         }
     }
     container.innerHTML = htmlElements;
     container.style.cssText = "grid-template-columns: " + styleString;
 }
 
-generateGrid(16);
+function paintCell(e) {
+    console.log(e);
+    if (e.shiftKey == true) {
+        const targetCell = document.getElementById(`${e.target.id}`);
+        targetCell.classList.add('painted');
+
+    }
+
+}
+
+generateGrid(50);
+const gridCells = document.querySelectorAll('.grid-item');
+gridCells.forEach(gridCell => gridCell.addEventListener('mouseover',(e)=>paintCell(e)));
