@@ -1,4 +1,7 @@
-var container = document.getElementById("grid-container");
+const container = document.getElementById("grid-container");
+gridCells = generateGrid(16);
+var paintingMethod = 'default';
+
 function generateGrid(gridSize) {
     var htmlElements = "";
     let styleString = "";
@@ -10,18 +13,55 @@ function generateGrid(gridSize) {
     }
     container.innerHTML = htmlElements;
     container.style.cssText = "grid-template-columns: " + styleString;
+    
+    const cells = document.querySelectorAll('.grid-item');
+    cells.forEach(cell => cell.addEventListener('mouseover',(e)=>paintCell(e)));
+    return cells;
 }
 
 function paintCell(e) {
-    console.log(e);
+    console.log(e.target);
     if (e.shiftKey == true) {
         const targetCell = document.getElementById(`${e.target.id}`);
-        targetCell.classList.add('painted');
-
+        if (paintingMethod == "random") {
+            targetCell.style.backgroundColor = getRandomColor();
+        } else {
+            targetCell.style.backgroundColor = "black";
+        } 
     }
-
 }
 
-generateGrid(50);
-const gridCells = document.querySelectorAll('.grid-item');
-gridCells.forEach(gridCell => gridCell.addEventListener('mouseover',(e)=>paintCell(e)));
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function clearGrid() {
+    console.log('grid cleared');
+    gridCells.forEach((gridCell) => {
+        gridCell.style.backgroundColor = 'white';
+    });
+}
+
+const newBtn = document.getElementById('newBtn');
+newBtn.addEventListener('click', () => {
+    generateGrid(prompt("Please enter grid size: "));
+});
+
+const clearBtn = document.getElementById('clearBtn');
+clearBtn.addEventListener('click', () => {
+    clearGrid();
+});
+
+const randomBtn = document.getElementById('randomBtn');
+randomBtn.addEventListener('click',() => {
+    paintingMethod = "random";
+});
+
+
+
+
