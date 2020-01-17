@@ -1,6 +1,7 @@
 const container = document.getElementById("grid-container");
 gridCells = generateGrid(16);
 var paintingMethod = 'default';
+var paintColor = 'black';
 
 function generateGrid(gridSize) {
     var htmlElements = "";
@@ -26,7 +27,7 @@ function paintCell(e) {
         if (paintingMethod == "random") {
             targetCell.style.backgroundColor = getRandomColor();
         } else {
-            targetCell.style.backgroundColor = "black";
+            targetCell.style.backgroundColor = paintColor;
         } 
     }
 }
@@ -56,6 +57,10 @@ const clearBtn = document.getElementById('clearBtn');
 clearBtn.addEventListener('click', () => {
     clearGrid();
 });
+
+const pickerBtn = document.getElementById('colorPicker');
+pickerBtn.addEventListener('input',() => paintColor = pickerBtn.value);
+pickerBtn.addEventListener('click', () => paintingMethod = "default");
 
 const randomBtn = document.getElementById('randomBtn');
 randomBtn.addEventListener('click',() => {

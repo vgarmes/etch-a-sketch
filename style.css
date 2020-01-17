@@ -14,10 +14,19 @@ body {
 button {
     width: 15vh;
     height: 6vh;
-    margin: 4vh 2vh;
+    margin: 2vh 2vh;
     font-size: 0.8rem;
     border-radius: 5px;
 }
+
+#colorPicker {
+    width: 7vh;
+    height: 6vh;
+    margin: 2vh 2vh;
+    font-size: 0.8rem;
+    border-radius: 5px;
+}
+
 #grid-container {
     display: grid;
     margin: 1vh auto;
@@ -31,4 +40,5 @@ button {
     font-size: 4px;
     text-align: center;
 }
+
 
