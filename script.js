@@ -1,7 +1,11 @@
 const container = document.getElementById("grid-container");
-gridCells = generateGrid(16);
 var paintingMethod = 'default';
 var paintColor = 'black';
+var opacityMode = false;
+const opacityStep = 0.25;
+const defaultColor = 'white';
+
+gridCells = generateGrid(16);
 
 function generateGrid(gridSize) {
     var htmlElements = "";
@@ -16,19 +20,34 @@ function generateGrid(gridSize) {
     container.style.cssText = "grid-template-columns: " + styleString;
     
     const cells = document.querySelectorAll('.grid-item');
-    cells.forEach(cell => cell.addEventListener('mouseover',(e)=>paintCell(e)));
+    cells.forEach((cell) => {
+        cell.addEventListener('mouseover',(e)=>paintCell(e));
+        cell.addEventListener('click', (e)=>paintCell(e));
+        cell.style.backgroundColor = defaultColor;
+    });
     return cells;
 }
 
 function paintCell(e) {
-    console.log(e.target);
-    if (e.shiftKey == true) {
+    if (((e.type == 'mouseover')&(e.shiftKey == true))||(e.type == 'click')) {
         const targetCell = document.getElementById(`${e.target.id}`);
+        if (opacityMode) {
+            if (Number(targetCell.style.opacity) + opacityStep > 1) {
+                targetCell.style.opacity = 1;
+            } else {
+                targetCell.style.opacity = Number(targetCell.style.opacity) + opacityStep;
+            }
+        } else if ((Number(targetCell.style.opacity) > 0) && (Number(targetCell.style.opacity) <= 1)) {
+            targetCell.style.opacity = null;
+        }
         if (paintingMethod == "random") {
             targetCell.style.backgroundColor = getRandomColor();
+        } else if (paintingMethod == "erasing") {
+            targetCell.style.backgroundColor = 'white';
+            targetCell.style.opacity = 'null';
         } else {
             targetCell.style.backgroundColor = paintColor;
-        } 
+        }
     }
 }
 
@@ -42,15 +61,15 @@ function getRandomColor() {
 }
 
 function clearGrid() {
-    console.log('grid cleared');
     gridCells.forEach((gridCell) => {
-        gridCell.style.backgroundColor = 'white';
+        gridCell.style.backgroundColor = defaultColor;
+        gridCell.style.opacity = null;
     });
 }
 
 const newBtn = document.getElementById('newBtn');
 newBtn.addEventListener('click', () => {
-    generateGrid(prompt("Please enter grid size: "));
+    gridCells = generateGrid(prompt("Please enter grid size: "));
 });
 
 const clearBtn = document.getElementById('clearBtn');
@@ -67,6 +86,11 @@ randomBtn.addEventListener('click',() => {
     paintingMethod = "random";
 });
 
+const opacityBtn = document.getElementById('opacityCheckbox');
+opacityBtn.addEventListener('input',() => opacityMode = opacityBtn.checked);
 
-
-
+const eraserBth = document.getElementById('eraserBtn');
+eraserBtn.addEventListener('click', ()  => {
+    paintingMethod = "erasing";
+    opacityMode = false;
+});
