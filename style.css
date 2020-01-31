@@ -27,6 +27,10 @@ button {
     border-radius: 5px;
 }
 
+.tutorial {
+    text-align: center;
+}
+
 #grid-container {
     display: grid;
     margin: 1vh auto;
